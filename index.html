@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Advanced Color Contrast Checker</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Modern Reset & Base Styles */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            line-height: 1.5;
+        }
+
+        /* Modern Container */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Modern Card Styles */
+        .card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Modern Grid Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Modern Input Styles */
+        .input-group {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .input-label {
+            font-weight: 500;
+            color: #475569;
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="color"] {
+            width: 60px;
+            height: 60px;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Modern Preview Styles */
+        .preview-section {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .preview-box {
+            border-radius: 0.5rem;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .preview-text {
+            margin: 0.5rem 0;
+        }
+
+        /* Modern Results Styles */
+        .results {
+            background: #f8fafc;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+        }
+
+        .result-item {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pass {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .fail {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Modern Button Styles */
+        .button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            background: #3b82f6;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .button:hover {
+            background: #2563eb;
+        }
+
+        /* Color Suggestions */
+        .color-suggestions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .color-swatch {
+            width: 30px;
+            height: 30px;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.2s;
+        }
+
+        .color-swatch:hover {
+            transform: scale(1.1);
+        }
+
+        /* Text Samples */
+        .text-samples {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .sample {
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        /* Accessibility Score */
+        .accessibility-score {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        /* Modern Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 2rem;
+            background: #1e293b;
+            color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 2rem; color: #1e293b;">
+                Advanced Color Contrast Checker
+                <span style="font-size: 1rem; color: #64748b; display: block; margin-top: 0.5rem;">
+                    WCAG 2.1 Compliance Checker with Real-time Analysis
+                </span>
+            </h1>
+
+            <div class="grid">
+                <!-- Color Input Section -->
+                <div>
+                    <div class="input-group">
+                        <div style="flex-direction: column; flex: 1;">
+                            <label class="input-label">Foreground Color</label>
+                            <div style="display: flex; gap: 1rem;">
+                                <input type="color" id="foregroundColor" value="#000000">
+                                <input type="text" id="foregroundHex" value="#000000" placeholder="Hex color">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <div style="flex-direction: column; flex: 1;">
+                            <label class="input-label">Background Color</label>
+                            <div style="display: flex; gap: 1rem;">
+                                <input type="color" id="backgroundColor" value="#FFFFFF">
+                                <input type="text" id="backgroundHex" value="#FFFFFF" placeholder="Hex color">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Color Suggestions -->
+                    <div>
+                        <label class="input-label">Quick Color Palettes</label>
+                        <div class="color-suggestions" id="colorSuggestions"></div>
+                    </div>
+                </div>
+
+                <!-- Preview Section -->
+                <div class="preview-section">
+                    <div>
+                        <label class="input-label">Live Preview</label>
+                        <div class="preview-box" id="preview">
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">Aa</div>
+                            <div style="font-size: 1rem;">The quick brown fox jumps over the lazy dog</div>
+                        </div>
+                    </div>
+
+                    <!-- Text Samples -->
+                    <div>
+                        <label class="input-label">Text Samples</label>
+                        <div class="text-samples" id="textSamples"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div style="margin-top: 2rem;">
+                <div class="accessibility-score" id="accessibilityScore"></div>
+                <div class="results" id="contrastResults"></div>
+            </div>
+
+            <!-- Additional Actions -->
+            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                <button class="button" onclick="invertColors()">
+                    <i class="fas fa-exchange-alt"></i> Invert Colors
+                </button>
+                <button class="button" onclick="copyValues()">
+                    <i class="fas fa-copy"></i> Copy Values
+                </button>
+                <button class="button" onclick="generateAlternatives()">
+                    <i class="fas fa-magic"></i> Suggest Alternatives
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    </body>
+</html>
